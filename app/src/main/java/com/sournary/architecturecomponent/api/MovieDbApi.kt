@@ -22,6 +22,12 @@ interface MovieDbApi {
     @GET("movie/upcoming")
     suspend fun getUpcomingMovies(@Query("page") page: Int): MovieListResponse
 
+    @GET("discover/movie")
+    suspend fun getMoviesByGenre(
+        @Query("page") page: Int,
+        @Query("with_genres") genreId: Int
+    ): MovieListResponse
+
     @GET("genre/movie/list")
     suspend fun getGenres(): GenreResponse
 

@@ -22,8 +22,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
             app:boxStrokeColor="@color/selector_box_stroke_color"
+            app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/ic_menu_hamburger">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -32,9 +36,25 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:text="@{viewModel.category}" />
+                android:text="@{viewModel.savedGenre.name}" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genre_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true" />
+
+        </HorizontalScrollView>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/movie_swipe_refresh"

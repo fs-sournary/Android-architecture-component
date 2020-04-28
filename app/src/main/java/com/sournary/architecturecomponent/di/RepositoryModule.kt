@@ -7,5 +7,5 @@ import org.koin.dsl.module
  * The file defines app's repositories.
  */
 val repositoryModule = module {
-    single { MovieRepository(get()) }
+    single { MovieRepository(get(), get()) }
 }

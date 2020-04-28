@@ -1,59 +1,69 @@
 package com.sournary.architecturecomponent.data
 
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 /**
  * The data model of movie.
  */
+@Entity(tableName = "movie")
 data class Movie(
     @SerializedName("adult")
-    val adult: Boolean? = null,
+    var adult: Boolean? = null,
     @SerializedName("backdrop_path")
-    val backdropPath: String? = null,
+    var backdropPath: String? = null,
     @SerializedName("budget")
-    val budget: Int? = null,
+    var budget: Int? = null,
     @SerializedName("genres")
-    val genres: List<Genre>? = null,
+    @Ignore
+    var genres: List<Genre>? = null,
     @SerializedName("homepage")
-    val homepage: String? = null,
+    var homepage: String? = null,
     @SerializedName("id")
-    val id: Int? = null,
+    @PrimaryKey
+    var id: Int,
     @SerializedName("imdb_id")
-    val imdbId: String? = null,
+    var imdbId: String? = null,
     @SerializedName("original_language")
-    val originalLanguage: String? = null,
+    var originalLanguage: String? = null,
     @SerializedName("original_title")
-    val originalTitle: String? = null,
+    var originalTitle: String? = null,
     @SerializedName("overview")
-    val overview: String? = null,
+    var overview: String? = null,
     @SerializedName("popularity")
-    val popularity: Double? = null,
+    var popularity: Double? = null,
     @SerializedName("poster_path")
-    val posterPath: String? = null,
+    var posterPath: String? = null,
     @SerializedName("production_countries")
-    val productionCountries: List<ProductionCountry>,
+    @Ignore
+    var productionCountries: List<ProductionCountry>? = null,
     @SerializedName("release_date")
-    val releaseDate: String? = null,
+    var releaseDate: String? = null,
     @SerializedName("revenue")
-    val revenue: Int? = null,
+    var revenue: Int? = null,
     @SerializedName("runtime")
-    val runtime: Int? = null,
+    var runtime: Int? = null,
     @SerializedName("spoken_languages")
-    val spokenLanguages: List<SpokenLanguage>,
+    @Ignore
+    var spokenLanguages: List<SpokenLanguage>? = null,
     @SerializedName("status")
-    val status: String? = null,
+    var status: String? = null,
     @SerializedName("tagline")
-    val tagline: String? = null,
+    var tagline: String? = null,
     @SerializedName("title")
-    val title: String? = null,
+    var title: String? = null,
     @SerializedName("video")
-    val video: Boolean? = null,
+    var video: Boolean? = null,
     @SerializedName("vote_average")
-    val voteAverage: Double? = null,
+    var voteAverage: Double? = null,
     @SerializedName("vote_count")
-    val voteCount: Int? = null
+    var voteCount: Int? = null
 ) {
+
+    constructor() : this(null, null, null, null, null, 1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
 
     companion object {
 

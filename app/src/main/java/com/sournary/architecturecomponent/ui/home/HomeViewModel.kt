@@ -1,7 +1,7 @@
 package com.sournary.architecturecomponent.ui.home
 
 import androidx.lifecycle.*
-import com.sournary.architecturecomponent.data.MovieCategory
+import com.sournary.architecturecomponent.data.Genre
 import com.sournary.architecturecomponent.repository.MovieRepository
 
 /**
@@ -12,17 +12,20 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val category = savedStateHandle.getLiveData<String>(KEY_MOVIE_CATEGORY)
-    private val moviesRepoResult = category.map {
+    val savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
+    private val moviesRepoResult = savedGenre.map {
         movieRepository.getMovies(viewModelScope, it)
     }
     val movies = moviesRepoResult.switchMap { it.data }
     val dataState = moviesRepoResult.switchMap { it.dataState!! }
     val refreshState = moviesRepoResult.switchMap { it.refreshState!! }
 
+    val genres: LiveData<List<Genre>> = movieRepository.genresUsingSwitchMap
+
     init {
-        if (!savedStateHandle.contains(KEY_MOVIE_CATEGORY)) {
-            savedStateHandle.set(KEY_MOVIE_CATEGORY, MovieCategory.NOW_PLAYING.value)
+        // Save now playing genre into disk for the first time.
+        if (!savedStateHandle.contains(KEY_GENRE)) {
+            savedStateHandle.set(KEY_GENRE, Genre.SAVED_GENRES[0])
         }
     }
 
@@ -34,15 +37,15 @@ class HomeViewModel(
         moviesRepoResult.value?.refresh?.invoke()
     }
 
-    fun showMoviesOfCategory(category: String): Boolean {
-        if (savedStateHandle.get<String>(KEY_MOVIE_CATEGORY) == category) return false
-        savedStateHandle.set(KEY_MOVIE_CATEGORY, category)
+    fun showMoviesOfCategory(genre: Genre): Boolean {
+        if (savedStateHandle.get<Genre>(KEY_GENRE) == genre) return false
+        savedStateHandle.set(KEY_GENRE, genre)
         return true
     }
 
     companion object {
 
-        private const val KEY_MOVIE_CATEGORY = "movie_category"
+        private const val KEY_GENRE = "movie_genre"
 
     }
 

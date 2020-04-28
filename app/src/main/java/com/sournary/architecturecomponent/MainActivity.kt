@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         main_nav.setNavigationItemSelectedListener {
+            main_root.closeDrawers()
             true
         }
         val navHostFragment =

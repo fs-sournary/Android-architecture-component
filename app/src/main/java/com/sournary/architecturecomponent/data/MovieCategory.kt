@@ -1,7 +1,7 @@
 package com.sournary.architecturecomponent.data
 
 /**
- *
+ * The class defines movie categories.
  */
 enum class MovieCategory(val value: String) {
     NOW_PLAYING("Now playing"),
