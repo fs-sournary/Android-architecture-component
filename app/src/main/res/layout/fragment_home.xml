@@ -18,11 +18,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/app_toolbar"
-            app:navigationIcon="@{R.drawable.ic_menu_hambuger}"
-            app:title="@{@string/home}" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_16"
+            app:boxStrokeColor="@color/selector_box_stroke_color"
+            app:startIconDrawable="@drawable/ic_menu_hamburger">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_text_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:text="@{viewModel.category}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/movie_swipe_refresh"
@@ -33,8 +45,8 @@
                 android:id="@+id/movie_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never"
                 android:clipToPadding="false"
+                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_home_movie" />
 

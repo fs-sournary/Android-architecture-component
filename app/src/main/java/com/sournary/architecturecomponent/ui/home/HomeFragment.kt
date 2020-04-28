@@ -1,7 +1,9 @@
 package com.sournary.architecturecomponent.ui.home
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
@@ -15,7 +17,6 @@ import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
 import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
-import kotlinx.android.synthetic.main.app_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -26,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private var adapter by autoCleared<MovieListAdapter>()
 
     private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
-    override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory() }
+    override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(this) }
 
     override val layoutId: Int = R.layout.fragment_home
 
@@ -41,24 +42,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupToolbar()
+        setupSearch()
         setupMovieList()
         setupViewModel()
     }
 
-    private fun setupToolbar() {
-        navigation_image.setOnClickListener {
-            menuFlowViewModel.openNavigation()
+    private fun setupSearch() {
+        search_text_input.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                getMoviesFromSearch()
+                true
+            } else {
+                false
+            }
+        }
+        search_text_input.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                getMoviesFromSearch()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun getMoviesFromSearch() {
+        search_text_input.text?.trim()?.let { searchText ->
+            if (searchText.isNotEmpty() && viewModel.showMoviesOfCategory(searchText.toString())) {
+                movie_recycler.scrollToPosition(0)
+                adapter.submitList(null)
+            }
         }
     }
 
     private fun setupMovieList() {
         movie_swipe_refresh.setOnRefreshListener {
-            viewModel.refreshNowPlayingMovies()
+            viewModel.refreshGetMovies()
         }
         adapter = MovieListAdapter(object : RetryListener {
             override fun retry() {
-                viewModel.retryNowPlayingMovies()
+                viewModel.retryGetMovies()
             }
         })
         movie_recycler.adapter = adapter
@@ -72,10 +95,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private fun setupViewModel() {
         menuFlowViewModel.setLockNavigation(false)
         viewModel.apply {
-            nowPlayingMovies.observe(viewLifecycleOwner) {
+            movies.observe(viewLifecycleOwner) {
                 adapter.submitList(it)
             }
-            networkState.observe(viewLifecycleOwner) {
+            dataState.observe(viewLifecycleOwner) {
                 adapter.setNetworkState(it)
             }
             refreshState.observe(viewLifecycleOwner) {

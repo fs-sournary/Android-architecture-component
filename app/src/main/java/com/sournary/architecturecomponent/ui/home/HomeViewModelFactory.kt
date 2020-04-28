@@ -1,7 +1,9 @@
 package com.sournary.architecturecomponent.ui.home
 
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.savedstate.SavedStateRegistryOwner
 import com.sournary.architecturecomponent.repository.MovieRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -9,12 +11,16 @@ import org.koin.core.inject
 /**
  * The factory class of home view model.
  */
-class HomeViewModelFactory : ViewModelProvider.NewInstanceFactory(), KoinComponent {
+class HomeViewModelFactory(owner: SavedStateRegistryOwner) :
+    AbstractSavedStateViewModelFactory(owner, null), KoinComponent {
 
     private val movieRepository: MovieRepository by inject()
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        HomeViewModel(movieRepository) as T
+    override fun <T : ViewModel?> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T = HomeViewModel(movieRepository, handle) as T
 
 }

@@ -31,9 +31,11 @@ class MovieDataSource(
         get() = _refreshState
 
     fun retryWhenAllFailed() {
-        val prevRetry = retry
-        retry = null
-        prevRetry?.invoke()
+        scope.launch {
+            val prevRetry = retry
+            retry = null
+            prevRetry?.invoke()
+        }
     }
 
     override fun loadInitial(
