@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.sournary.architecturecomponent.BR
 import com.sournary.architecturecomponent.ext.autoCleared
 
@@ -21,6 +23,7 @@ import com.sournary.architecturecomponent.ext.autoCleared
  */
 abstract class BaseFragment<B : ViewDataBinding, VM : ViewModel> : Fragment() {
 
+    protected val navController: NavController by lazy { findNavController() }
     protected var binding by autoCleared<B>()
 
     protected abstract val viewModel: VM

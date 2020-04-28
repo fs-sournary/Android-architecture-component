@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation_main" />
+        app:navGraph="@navigation/nav_main" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/main_nav"

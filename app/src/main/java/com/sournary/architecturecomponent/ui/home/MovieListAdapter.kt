@@ -10,10 +10,16 @@ import com.sournary.architecturecomponent.ui.common.RetryListener
 /**
  * The adapter of movie recycler view.
  */
-class MovieListAdapter(retryListener: RetryListener) :
-    BasePagingListAdapter<Movie, ItemHomeMovieBinding>(Movie.COMPARATOR, retryListener) {
+class MovieListAdapter(
+    retryListener: RetryListener,
+    private val clickListener: MovieListItemListener
+) : BasePagingListAdapter<Movie, ItemHomeMovieBinding>(Movie.COMPARATOR, retryListener) {
 
     override fun createBinding(parent: ViewGroup): ItemHomeMovieBinding =
         ItemHomeMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+    override fun bindData(item: Movie, binding: ItemHomeMovieBinding) {
+        binding.listener = clickListener
+    }
 
 }

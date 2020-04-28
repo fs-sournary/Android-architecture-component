@@ -13,6 +13,7 @@ import androidx.lifecycle.observe
 import com.google.android.material.chip.Chip
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.data.Genre
+import com.sournary.architecturecomponent.data.Movie
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
 import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ext.hideKeyboard
@@ -22,7 +23,6 @@ import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
 import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
-import timber.log.Timber
 
 /**
  * The Fragment represents home screen.
@@ -96,11 +96,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         movie_swipe_refresh.setOnRefreshListener {
             viewModel.refreshGetMovies()
         }
-        adapter = MovieListAdapter(object : RetryListener {
-            override fun retry() {
-                viewModel.retryGetMovies()
+        adapter = MovieListAdapter(
+            retryListener = object : RetryListener {
+                override fun retry() {
+                    viewModel.retryGetMovies()
+                }
+            },
+            clickListener = object : MovieListItemListener {
+                override fun onItemClick(movie: Movie) {
+                    val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
+                    navController.navigate(directions)
+                }
             }
-        })
+        )
         movie_recycler.adapter = adapter
         val divider =
             ContextCompat.getDrawable(context ?: return, R.drawable.shape_movie_divider) ?: return

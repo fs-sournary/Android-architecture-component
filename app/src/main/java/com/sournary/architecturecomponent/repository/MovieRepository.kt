@@ -94,4 +94,9 @@ class MovieRepository(
             else -> movieDbApi.getMoviesByGenre(page, genre.id)
         }
 
+    fun getMovieDetail(id: Int): LiveData<Movie> = liveData {
+        val movie = movieDbApi.getMovieDetail(id)
+        emit(movie)
+    }
+
 }

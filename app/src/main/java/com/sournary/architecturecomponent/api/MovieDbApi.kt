@@ -1,8 +1,10 @@
 package com.sournary.architecturecomponent.api
 
 import com.sournary.architecturecomponent.data.GenreResponse
+import com.sournary.architecturecomponent.data.Movie
 import com.sournary.architecturecomponent.data.MovieListResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -30,5 +32,8 @@ interface MovieDbApi {
 
     @GET("genre/movie/list")
     suspend fun getGenres(): GenreResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetail(@Path("movie_id") id: Int): Movie
 
 }
