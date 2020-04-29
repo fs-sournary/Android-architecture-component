@@ -32,7 +32,6 @@
             android:layout_width="@dimen/dp_48"
             android:layout_height="@dimen/dp_48"
             app:centerCrop="@{true}"
-            app:circleCrop="@{true}"
             app:url="@{BuildConfig.BASE_IMAGE_URL + `/` + item.backdropPath}"
             tools:src="@mipmap/ic_launcher" />
 

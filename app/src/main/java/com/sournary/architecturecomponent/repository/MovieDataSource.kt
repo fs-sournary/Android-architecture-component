@@ -8,6 +8,7 @@ import com.sournary.architecturecomponent.data.Movie
 import com.sournary.architecturecomponent.data.MovieListResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * The data source fetches movies from server by using Paging and Coroutine.

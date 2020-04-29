@@ -11,19 +11,22 @@
             name="dataState"
             type="com.sournary.architecturecomponent.repository.DataState" />
 
-        <variable
-            name="retry"
-            type="com.sournary.architecturecomponent.ui.common.RetryListener" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingTop="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_16"
-        android:paddingBottom="@dimen/dp_8">
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/error_close_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/dp_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close_black"/>
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -40,22 +43,26 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp_56"
+            android:paddingEnd="@dimen/dp_56"
             android:text="@string/retry"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onSafeClick="@{() -> retry.retry()}"
             app:visibleGone="@{dataState.status == Status.ERROR}" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_margin="@dimen/dp_16"
             android:ellipsize="end"
             android:maxLines="3"
             android:text="@{dataState.message}"
-            app:layout_constraintEnd_toStartOf="@id/retry_button"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/retry_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="An error happened because of the internet connection" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

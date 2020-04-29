@@ -20,7 +20,7 @@ import java.util.concurrent.Executors
  */
 abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
     diffUtil: DiffUtil.ItemCallback<T>,
-    private val retryListener: RetryListener
+    private val retryListener: RetryListener?
 ) : PagedListAdapter<T, DataViewHolder<ViewDataBinding>>(
     AsyncDifferConfig.Builder(diffUtil)
         .setBackgroundThreadExecutor(Executors.newSingleThreadExecutor())

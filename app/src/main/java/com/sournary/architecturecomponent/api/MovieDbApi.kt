@@ -36,4 +36,10 @@ interface MovieDbApi {
     @GET("movie/{movie_id}")
     suspend fun getMovieDetail(@Path("movie_id") id: Int): Movie
 
+    @GET("movie/{movie_id}/similar")
+    suspend fun getRelatedMovies(
+        @Path("movie_id") id: Int,
+        @Query("page") page: Int
+    ): MovieListResponse
+
 }

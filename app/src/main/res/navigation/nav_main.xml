@@ -28,6 +28,45 @@
             android:defaultValue="0"
             app:argType="integer" />
 
+        <action
+            android:id="@+id/navigate_to_website"
+            app:destination="@id/website_dest"
+            app:enterAnim="@anim/anim_enter_from_right"
+            app:popExitAnim="@anim/anim_exit_to_right" />
+
+        <action
+            android:id="@+id/navigate_to_watch_video"
+            app:destination="@id/watch_video_dest"
+            app:enterAnim="@anim/anim_enter_from_right"
+            app:popExitAnim="@anim/anim_exit_to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/website_dest"
+        android:name="com.sournary.architecturecomponent.ui.website.WebsiteFragment"
+        tools:layout="@layout/fragment_website">
+
+        <argument
+            android:name="title"
+            android:defaultValue=" "
+            app:argType="string" />
+
+        <argument
+            android:name="url"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/watch_video_dest"
+        android:name="com.sournary.architecturecomponent.ui.watchvideo.WatchVideoFragment"
+        tools:layout="@layout/fragment_watch_video">
+
+        <argument
+            android:name="key"
+            app:argType="string" />
+
     </fragment>
 
 </navigation>

@@ -4,4 +4,7 @@
     <string name="retry">Retry</string>
     <string name="setting">Setting</string>
     <string name="hint">Please click the below genres to search movies</string>
+    <string name="trailer">Trailer</string>
+    <string name="visit_website">Visit website</string>
+    <string name="related_movies">Related movies</string>
 </resources>

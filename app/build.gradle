@@ -27,6 +27,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
             buildConfigField("String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
             buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
+            buildConfigField("String", "YOUTUBE_API_KEY", "\"${YOUTUBE_API_KEY}\"")
         }
         release {
             minifyEnabled = false
@@ -45,61 +46,53 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation deps.kotlin.stdlib
     implementation deps.app_compat
     implementation deps.core
     implementation deps.constraint_layout
     implementation deps.material
     implementation deps.swipe_refresh_layout
-
     // Room
     implementation deps.room.runtime
     kapt deps.room.compiler
-
     // Lifecycle
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     implementation deps.lifecycle.savedstate
-
     // Navigation
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
-
     // Paging
     implementation deps.paging
-
     // Glide
     implementation deps.glide.runtime
     kapt deps.glide.compiler
-
     // Coroutine
     implementation deps.coroutine.core
     implementation deps.coroutine.android
-
     // Retrofit
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.retrofit.adapter_rxjava2
-
     // Okhttp_logging_interceptor
     implementation deps.okhttp_logging_interceptor
-
     // Koin
     implementation deps.koin.scope
     implementation deps.koin.viewmodel
     implementation deps.koin.ext
-
     // Timber
     implementation deps.timber
-
     // Koin
     implementation deps.koin.scope
     implementation deps.koin.viewmodel
     implementation deps.koin.ext
+
+    implementation "com.google.android.gms:play-services:12.0.1"
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 }

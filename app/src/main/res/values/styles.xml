@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:lineSpacingMultiplier">1.4</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/color_status_bar</item>
         <item name="android:navigationBarColor">@color/color_navigation_bar</item>

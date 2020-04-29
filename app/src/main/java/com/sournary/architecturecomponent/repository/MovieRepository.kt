@@ -12,6 +12,7 @@ import com.sournary.architecturecomponent.data.MovieListResponse
 import com.sournary.architecturecomponent.db.GenreDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 /**
  * The repository class for movie.
@@ -94,9 +95,21 @@ class MovieRepository(
             else -> movieDbApi.getMoviesByGenre(page, genre.id)
         }
 
-    fun getMovieDetail(id: Int): LiveData<Movie> = liveData {
-        val movie = movieDbApi.getMovieDetail(id)
-        emit(movie)
+    suspend fun getMovieDetail(id: Int): Movie = movieDbApi.getMovieDetail(id)
+
+    fun getRatedMovies(scope: CoroutineScope, movieId: Int): Listing<Movie> {
+        val factory = MovieDataSource.Factory(
+            block = { page -> movieDbApi.getRelatedMovies(movieId, page) },
+            scope = scope
+        )
+        val movies = factory.toLiveData(pageSize = 30)
+        return Listing(
+            data = movies,
+            dataState = factory.sourceLiveData.switchMap { it.networkState },
+            refreshState = factory.sourceLiveData.switchMap { it.refreshState },
+            retry = { factory.sourceLiveData.value?.retryWhenAllFailed() },
+            refresh = { factory.sourceLiveData.value?.invalidate() }
+        )
     }
 
 }

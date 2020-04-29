@@ -32,7 +32,7 @@ fun ImageView.loadUrlImage(url: String, centerCrop: Boolean, circleCrop: Boolean
         requestBuilder = requestBuilder.centerCrop()
     }
     if (circleCrop) {
-        requestBuilder = requestBuilder.centerCrop()
+        requestBuilder = requestBuilder.circleCrop()
     }
     requestBuilder.into(this)
 }
