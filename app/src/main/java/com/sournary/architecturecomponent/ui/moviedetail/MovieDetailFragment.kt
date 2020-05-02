@@ -12,10 +12,8 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentMovieDetailBinding
-import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
-import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import kotlinx.android.synthetic.main.layout_network_state.*
@@ -31,7 +29,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
 
     private var movieId: Int = 0
 
-    private var relatedMovieAdapter by autoCleared<RelatedMovieAdapter>()
+    private lateinit var relatedMovieAdapter: RelatedMovieAdapter
 
     private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
     override val viewModel: MovieDetailViewModel by viewModels { MovieDetailViewModelFactory(movieId) }
@@ -84,11 +82,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
     }
 
     private fun setupRelatedMovieList() {
-        relatedMovieAdapter = RelatedMovieAdapter(object : RetryListener {
-            override fun retry() {
-                viewModel.retryGetRelatedMovies()
-            }
-        })
+        relatedMovieAdapter = RelatedMovieAdapter()
         related_movie_recycler.adapter = relatedMovieAdapter
     }
 
@@ -96,10 +90,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
         menuFlowViewModel.setLockNavigation(true)
         viewModel.apply {
             relatedMovies.observe(viewLifecycleOwner) {
-                relatedMovieAdapter.submitList(it)
-            }
-            relatedMovieState?.observe(viewLifecycleOwner) {
-                relatedMovieAdapter.setNetworkState(it)
+                relatedMovieAdapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
         }
     }

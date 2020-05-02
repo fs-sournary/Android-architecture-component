@@ -11,13 +11,10 @@
             name="item"
             type="com.sournary.architecturecomponent.model.Movie" />
 
-        <variable
-            name="listener"
-            type="com.sournary.architecturecomponent.ui.home.MovieListItemListener" />
-
     </data>
 
     <LinearLayout
+        android:id="@+id/item_movie_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -25,8 +22,7 @@
         android:paddingStart="@dimen/dp_16"
         android:paddingTop="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_16"
-        android:paddingBottom="@dimen/dp_8"
-        app:onSafeClick="@{() -> listener.onItemClick(item)}">
+        android:paddingBottom="@dimen/dp_8">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/dp_48"

@@ -6,30 +6,36 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
+import androidx.paging.LoadType
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.sournary.architecturecomponent.R
-import com.sournary.architecturecomponent.model.Genre
-import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
-import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ext.hideKeyboard
-import com.sournary.architecturecomponent.repository.NetworkState
+import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.ui.common.BaseFragment
+import com.sournary.architecturecomponent.ui.common.FooterNetworkStateAdapter
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
-import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 
 /**
  * The Fragment represents home screen.
  */
+@FlowPreview
+@ExperimentalCoroutinesApi
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
-    private var adapter by autoCleared<MovieListAdapter>()
+    private lateinit var adapter: MovieListAdapter
 
     private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
     override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(this) }
@@ -79,6 +85,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 false
             }
         }
+        retry_button.setOnClickListener {
+            adapter.retry()
+        }
     }
 
     private fun getMoviesFromSearch() {
@@ -87,29 +96,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.genres.value?.forEach { genre ->
             if (genre.name == searchText && viewModel.showMoviesOfCategory(genre)) {
                 movie_recycler.scrollToPosition(0)
-                adapter.submitList(null)
             }
         }
     }
 
     private fun setupMovieList() {
         movie_swipe_refresh.setOnRefreshListener {
-            viewModel.refreshGetMovies()
+            adapter.refresh()
         }
-        adapter = MovieListAdapter(
-            retryListener = object : RetryListener {
-                override fun retry() {
-                    viewModel.retryGetMovies()
-                }
-            },
-            clickListener = object : MovieListItemListener {
-                override fun onItemClick(movie: Movie) {
-                    val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
-                    navController.navigate(directions)
-                }
-            }
+        adapter = MovieListAdapter { movie ->
+            val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
+            navController.navigate(directions)
+        }
+        movie_recycler.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = FooterNetworkStateAdapter { adapter.retry() },
+            footer = FooterNetworkStateAdapter { adapter.retry() }
         )
-        movie_recycler.adapter = adapter
+        adapter.addLoadStateListener { loadType, loadState ->
+            Timber.d("Load type: $loadType - load state: $loadState")
+            if (loadType == LoadType.REFRESH) {
+                movie_recycler.isVisible = loadState == LoadState.Idle
+                progress.isVisible = loadState == LoadState.Loading
+                retry_button.isVisible = loadState is LoadState.Error
+            } else {
+                movie_recycler.isVisible = true
+                progress.isVisible = false
+                retry_button.isVisible = false
+            }
+            if (loadState is LoadState.Error) {
+                Snackbar.make(
+                    binding.root,
+                    "Wooops ${loadState.error.message}",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
         val divider =
             ContextCompat.getDrawable(context ?: return, R.drawable.shape_movie_divider) ?: return
         val horizontalSpacing = resources.getDimensionPixelOffset(R.dimen.dp_16)
@@ -121,13 +142,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         menuFlowViewModel.setLockNavigation(false)
         viewModel.apply {
             movies.observe(viewLifecycleOwner) {
-                adapter.submitList(it)
-            }
-            networkState.observe(viewLifecycleOwner) {
-                adapter.setNetworkState(it)
-            }
-            refreshState.observe(viewLifecycleOwner) {
-                movie_swipe_refresh.isRefreshing = it == NetworkState.LOADING
+                adapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
             genres.observe(viewLifecycleOwner) {
                 addGenres(it)
@@ -147,11 +162,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 search_text_input.setText(genre.name)
                 if (viewModel.showMoviesOfCategory(genre)) {
                     movie_recycler.scrollToPosition(0)
-                    adapter.submitList(null)
                 }
             }
             genre_group.addView(chip)
         }
     }
-
 }

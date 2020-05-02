@@ -6,4 +6,4 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Each layout's item should include a "item" variable to bind data.
  */
-class DataViewHolder<V : ViewDataBinding>(val binding: V) : RecyclerView.ViewHolder(binding.root)
+class ListViewHolder<V : ViewDataBinding>(val binding: V) : RecyclerView.ViewHolder(binding.root)

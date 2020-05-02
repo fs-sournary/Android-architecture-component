@@ -15,15 +15,15 @@ import java.util.concurrent.Executors
  * @param B binding Object of layout's item.
  */
 abstract class BaseListAdapter<T, B : ViewDataBinding>(diffCallback: DiffUtil.ItemCallback<T>) :
-    ListAdapter<T, DataViewHolder<B>>(
+    ListAdapter<T, ListViewHolder<B>>(
         AsyncDifferConfig.Builder<T>(diffCallback)
             .setBackgroundThreadExecutor(Executors.newSingleThreadExecutor())
             .build()
     ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder<B> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder<B> {
         val binding = createBinding(parent, viewType)
-        return DataViewHolder(binding)
+        return ListViewHolder(binding)
     }
 
     /**
@@ -33,7 +33,7 @@ abstract class BaseListAdapter<T, B : ViewDataBinding>(diffCallback: DiffUtil.It
      */
     protected abstract fun createBinding(parent: ViewGroup, viewType: Int): B
 
-    override fun onBindViewHolder(holder: DataViewHolder<B>, position: Int) {
+    override fun onBindViewHolder(holder: ListViewHolder<B>, position: Int) {
         val item = getItem(position) ?: return
         holder.binding.setVariable(BR.item, item)
         bindData(item)
