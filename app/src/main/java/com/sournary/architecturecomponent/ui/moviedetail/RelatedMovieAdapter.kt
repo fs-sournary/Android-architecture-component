@@ -2,18 +2,30 @@ package com.sournary.architecturecomponent.ui.moviedetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.sournary.architecturecomponent.model.Movie
+import androidx.paging.PagingDataAdapter
 import com.sournary.architecturecomponent.databinding.ItemRelatedMovieBinding
-import com.sournary.architecturecomponent.ui.common.BasePagingListAdapter
-import com.sournary.architecturecomponent.ui.common.RetryListener
+import com.sournary.architecturecomponent.model.Movie
+import com.sournary.architecturecomponent.ui.common.ListViewHolder
 
 /**
  * The class is the related movies RecyclerView's adapter.
  */
-class RelatedMovieAdapter(private val retryListener: RetryListener) :
-    BasePagingListAdapter<Movie, ItemRelatedMovieBinding>(Movie.COMPARATOR, retryListener) {
+class RelatedMovieAdapter :
+    PagingDataAdapter<Movie, ListViewHolder<ItemRelatedMovieBinding>>(Movie.COMPARATOR) {
 
-    override fun createBinding(parent: ViewGroup): ItemRelatedMovieBinding =
-        ItemRelatedMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onBindViewHolder(holder: ListViewHolder<ItemRelatedMovieBinding>, position: Int) {
+        holder.binding.apply {
+            item = getItem(position)
+            executePendingBindings()
+        }
+    }
 
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ListViewHolder<ItemRelatedMovieBinding> {
+        val binding =
+            ItemRelatedMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ListViewHolder(binding)
+    }
 }
