@@ -12,12 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.google.android.material.chip.Chip
 import com.sournary.architecturecomponent.R
-import com.sournary.architecturecomponent.data.Genre
-import com.sournary.architecturecomponent.data.Movie
+import com.sournary.architecturecomponent.model.Genre
+import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
 import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ext.hideKeyboard
-import com.sournary.architecturecomponent.repository.DataState
+import com.sournary.architecturecomponent.repository.NetworkState
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
 import com.sournary.architecturecomponent.ui.common.RetryListener
@@ -123,11 +123,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             movies.observe(viewLifecycleOwner) {
                 adapter.submitList(it)
             }
-            dataState.observe(viewLifecycleOwner) {
+            networkState.observe(viewLifecycleOwner) {
                 adapter.setNetworkState(it)
             }
             refreshState.observe(viewLifecycleOwner) {
-                movie_swipe_refresh.isRefreshing = it == DataState.LOADING
+                movie_swipe_refresh.isRefreshing = it == NetworkState.LOADING
             }
             genres.observe(viewLifecycleOwner) {
                 addGenres(it)

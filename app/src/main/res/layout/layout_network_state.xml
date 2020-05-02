@@ -8,8 +8,8 @@
         <import type="com.sournary.architecturecomponent.repository.Status" />
 
         <variable
-            name="dataState"
-            type="com.sournary.architecturecomponent.repository.DataState" />
+            name="networkState"
+            type="com.sournary.architecturecomponent.repository.NetworkState" />
 
     </data>
 
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visibleGone="@{dataState.status == Status.LOADING}"
+            app:visibleGone="@{networkState.status == Status.LOADING}"
             tools:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visibleGone="@{dataState.status == Status.ERROR}" />
+            app:visibleGone="@{networkState.status == Status.ERROR}" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
@@ -58,7 +58,7 @@
             android:layout_margin="@dimen/dp_16"
             android:ellipsize="end"
             android:maxLines="3"
-            android:text="@{dataState.message}"
+            android:text="@{networkState.message}"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@id/retry_button"
             app:layout_constraintEnd_toEndOf="parent"

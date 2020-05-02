@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="com.sournary.architecturecomponent.data.Movie" />
+            type="com.sournary.architecturecomponent.model.Movie" />
 
         <variable
             name="listener"

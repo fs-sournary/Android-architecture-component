@@ -1,6 +1,7 @@
-package com.sournary.architecturecomponent.data
+package com.sournary.architecturecomponent.api
 
 import com.google.gson.annotations.SerializedName
+import com.sournary.architecturecomponent.model.Movie
 
 /**
  * A list of movie that is received from server.

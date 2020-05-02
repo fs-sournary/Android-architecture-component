@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-import com.sournary.architecturecomponent.data.Movie
-import com.sournary.architecturecomponent.data.MovieListResponse
+import com.sournary.architecturecomponent.model.Movie
+import com.sournary.architecturecomponent.api.MovieListResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * The data source fetches movies from server by using Paging and Coroutine.
@@ -23,12 +22,12 @@ class MovieDataSource(
 
     private var retry: (() -> Any)? = null
 
-    private val _networkState = MutableLiveData<DataState>()
-    val networkState: LiveData<DataState>
+    private val _networkState = MutableLiveData<NetworkState>()
+    val networkState: LiveData<NetworkState>
         get() = _networkState
 
-    private val _refreshState = MutableLiveData<DataState>()
-    val refreshState: LiveData<DataState>
+    private val _refreshState = MutableLiveData<NetworkState>()
+    val refreshState: LiveData<NetworkState>
         get() = _refreshState
 
     fun retryWhenAllFailed() {
@@ -45,16 +44,16 @@ class MovieDataSource(
     ) {
         scope.launch {
             try {
-                _networkState.postValue(DataState.LOADING)
-                _refreshState.postValue(DataState.LOADING)
+                _networkState.postValue(NetworkState.LOADING)
+                _refreshState.postValue(NetworkState.LOADING)
                 val response = block.invoke(1)
                 val movies = response.results ?: emptyList()
                 retry = null
-                _networkState.postValue(DataState.SUCCESS)
-                _refreshState.postValue(DataState.SUCCESS)
+                _networkState.postValue(NetworkState.SUCCESS)
+                _refreshState.postValue(NetworkState.SUCCESS)
                 callback.onResult(movies, null, 2)
             } catch (e: Exception) {
-                val error = DataState.error(e.message ?: DEF_ERROR)
+                val error = NetworkState.error(e.message ?: DEF_ERROR)
                 _networkState.postValue(error)
                 _refreshState.postValue(error)
                 retry = { loadInitial(params, callback) }
@@ -65,15 +64,15 @@ class MovieDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         scope.launch {
             try {
-                _networkState.value = DataState.LOADING
+                _networkState.value = NetworkState.LOADING
                 val response = block.invoke(params.key)
                 val movies = response.results ?: emptyList()
                 retry = null
                 val nextKey = if (params.key == response.totalPage) null else params.key + 1
-                _networkState.postValue(DataState.SUCCESS)
+                _networkState.postValue(NetworkState.SUCCESS)
                 callback.onResult(movies, nextKey)
             } catch (e: Exception) {
-                _networkState.postValue(DataState.error(e.message ?: DEF_ERROR))
+                _networkState.postValue(NetworkState.error(e.message ?: DEF_ERROR))
                 retry = { loadAfter(params, callback) }
             }
         }

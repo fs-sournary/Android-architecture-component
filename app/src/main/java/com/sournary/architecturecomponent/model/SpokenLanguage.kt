@@ -1,4 +1,4 @@
-package com.sournary.architecturecomponent.data
+package com.sournary.architecturecomponent.model
 
 import com.google.gson.annotations.SerializedName
 

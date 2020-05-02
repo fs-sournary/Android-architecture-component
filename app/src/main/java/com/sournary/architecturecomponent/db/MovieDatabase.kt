@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.sournary.architecturecomponent.data.Genre
-import com.sournary.architecturecomponent.data.Movie
+import com.sournary.architecturecomponent.model.Genre
+import com.sournary.architecturecomponent.model.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

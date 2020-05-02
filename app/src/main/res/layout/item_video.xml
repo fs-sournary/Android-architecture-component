@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.sournary.architecturecomponent.model.Video" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/avatar_image"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:text="@{item.name}"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar_image"
+            app:layout_constraintTop_toTopOf="@id/avatar_image"
+            tools:text="UK Trailer" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@{item.type}"
+            app:layout_constraintStart_toEndOf="@id/avatar_image"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            tools:text="Trailer" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:text="@{String.valueOf(item.size)}"
+            app:layout_constraintStart_toEndOf="@id/type_text"
+            app:layout_constraintTop_toTopOf="@id/type_text"
+            tools:text="1080" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

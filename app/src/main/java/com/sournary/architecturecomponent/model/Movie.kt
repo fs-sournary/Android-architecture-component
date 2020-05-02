@@ -1,4 +1,4 @@
-package com.sournary.architecturecomponent.data
+package com.sournary.architecturecomponent.model
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity

@@ -2,7 +2,7 @@ package com.sournary.architecturecomponent.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.sournary.architecturecomponent.data.Movie
+import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.databinding.ItemHomeMovieBinding
 import com.sournary.architecturecomponent.ui.common.BasePagingListAdapter
 import com.sournary.architecturecomponent.ui.common.RetryListener

@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="none"
-            app:visibleGone="@{viewModel.dataState.status == Status.SUCCESS}">
+            app:visibleGone="@{viewModel.movieNetworkState.status == Status.SUCCESS}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -214,12 +214,12 @@
             android:id="@+id/network_state_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:visibleGone="@{viewModel.dataState.status != Status.SUCCESS}"
+            app:visibleGone="@{viewModel.movieNetworkState.status != Status.SUCCESS}"
             tools:visibility="gone">
 
             <include
                 layout="@layout/layout_network_state"
-                app:dataState="@{viewModel.dataState}"
+                app:networkState="@{viewModel.movieNetworkState}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

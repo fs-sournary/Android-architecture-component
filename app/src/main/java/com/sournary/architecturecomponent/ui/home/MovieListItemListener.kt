@@ -1,6 +1,6 @@
 package com.sournary.architecturecomponent.ui.home
 
-import com.sournary.architecturecomponent.data.Movie
+import com.sournary.architecturecomponent.model.Movie
 
 /**
  * The interface define a method that is invoked when user clicks item's layout.

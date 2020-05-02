@@ -4,17 +4,17 @@ package com.sournary.architecturecomponent.repository
  * The file defines status of data.
  */
 @Suppress("DataClassPrivateConstructor")
-data class DataState private constructor(
+data class NetworkState private constructor(
     val status: Status,
     val message: String? = null
 ) {
 
     companion object {
 
-        val LOADING = DataState(Status.LOADING)
-        val SUCCESS = DataState(Status.SUCCESS)
+        val LOADING = NetworkState(Status.LOADING)
+        val SUCCESS = NetworkState(Status.SUCCESS)
 
-        fun error(message: String) = DataState(Status.ERROR, message)
+        fun error(message: String) = NetworkState(Status.ERROR, message)
 
     }
 

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import com.sournary.architecturecomponent.BR
 import com.sournary.architecturecomponent.databinding.ItemNetworkStateBinding
-import com.sournary.architecturecomponent.repository.DataState
+import com.sournary.architecturecomponent.repository.NetworkState
 import java.util.concurrent.Executors
 
 /**
@@ -27,7 +27,7 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
         .build()
 ) {
 
-    private var dataState: DataState? = null
+    private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -51,7 +51,7 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
     override fun onBindViewHolder(holder: DataViewHolder<ViewDataBinding>, position: Int) {
         when (getItemViewType(position)) {
             NETWORK_STATE_TYPE -> with(holder.binding as ItemNetworkStateBinding) {
-                dataState = this@BasePagingListAdapter.dataState
+                networkState = this@BasePagingListAdapter.networkState
                 retry = retryListener
                 executePendingBindings()
             }
@@ -78,10 +78,10 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
             ITEM_TYPE
         }
 
-    fun setNetworkState(newDataState: DataState?) {
-        val prevDataState = dataState
+    fun setNetworkState(newNetworkState: NetworkState?) {
+        val prevNetworkState = networkState
         val hadExtraRow = hasExtraRow()
-        dataState = newDataState
+        networkState = newNetworkState
         val hasExtraRow = hasExtraRow()
         if (hadExtraRow != hasExtraRow) {
             if (hasExtraRow) {
@@ -89,14 +89,14 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
             } else {
                 notifyItemRemoved(super.getItemCount())
             }
-        } else if (hasExtraRow && prevDataState != newDataState) {
+        } else if (hasExtraRow && prevNetworkState != newNetworkState) {
             notifyItemChanged(itemCount - 1)
         }
     }
 
     override fun getItemCount(): Int = super.getItemCount() + if (hasExtraRow()) 1 else 0
 
-    private fun hasExtraRow(): Boolean = dataState != null && dataState != DataState.SUCCESS
+    private fun hasExtraRow(): Boolean = networkState != null && networkState != NetworkState.SUCCESS
 
     companion object {
 

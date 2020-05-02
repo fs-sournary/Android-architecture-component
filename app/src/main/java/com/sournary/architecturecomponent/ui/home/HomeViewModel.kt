@@ -1,7 +1,7 @@
 package com.sournary.architecturecomponent.ui.home
 
 import androidx.lifecycle.*
-import com.sournary.architecturecomponent.data.Genre
+import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.repository.MovieRepository
 
 /**
@@ -17,10 +17,10 @@ class HomeViewModel(
         movieRepository.getMovies(viewModelScope, it)
     }
     val movies = moviesRepoResult.switchMap { it.data }
-    val dataState = moviesRepoResult.switchMap { it.dataState!! }
+    val networkState = moviesRepoResult.switchMap { it.networkState!! }
     val refreshState = moviesRepoResult.switchMap { it.refreshState!! }
 
-    val genres: LiveData<List<Genre>> = movieRepository.genresUsingSwitchMap
+    val genres: LiveData<List<Genre>> = movieRepository.genres
 
     init {
         // Save now playing genre into disk for the first time.

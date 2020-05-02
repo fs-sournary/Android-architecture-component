@@ -2,43 +2,22 @@ package com.sournary.architecturecomponent.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.paging.toLiveData
 import com.sournary.architecturecomponent.api.MovieDbApi
-import com.sournary.architecturecomponent.data.Genre
-import com.sournary.architecturecomponent.data.Movie
-import com.sournary.architecturecomponent.data.MovieListResponse
+import com.sournary.architecturecomponent.api.MovieListResponse
 import com.sournary.architecturecomponent.db.GenreDao
+import com.sournary.architecturecomponent.model.Genre
+import com.sournary.architecturecomponent.model.Movie
+import com.sournary.architecturecomponent.model.Video
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import timber.log.Timber
 
 /**
  * The repository class for movie.
  */
-class MovieRepository(
-    private val movieDbApi: MovieDbApi,
-    genreDao: GenreDao
-) {
+class MovieRepository(private val movieDbApi: MovieDbApi, genreDao: GenreDao) {
 
-    //-- Using liveData{} builder --//
-    val genres: LiveData<List<Genre>> = liveData {
-        val results = arrayListOf<Genre>()
-        val serverGenres = try {
-            movieDbApi.getGenres().genres
-        } catch (throwable: Throwable) {
-            null
-        }
-        val localGenres = genreDao.getGenres()
-        emitSource(localGenres.map {
-            results.addAll(it)
-            serverGenres?.apply { results.addAll(this) }
-            results.toList()
-        })
-    }
-    //-- Using switchMap + liveData{} builder--//
-    val genresUsingSwitchMap: LiveData<List<Genre>> = genreDao.getGenres()
+    val genres: LiveData<List<Genre>> = genreDao.getGenres()
         .switchMap { localGenres ->
             liveData {
                 val results = arrayListOf<Genre>()
@@ -53,7 +32,17 @@ class MovieRepository(
             }
         }
 
-    //-- Only using coroutine --//
+    fun getVideos(movieId: Int): LiveData<RepoResult<List<Video>>> = liveData {
+        try {
+            emit(RepoResult(networkState = NetworkState.LOADING))
+            val videos = movieDbApi.getVideos(movieId).results ?: emptyList()
+            emit(RepoResult(data = videos, networkState = NetworkState.SUCCESS))
+        } catch (throwable: Throwable) {
+            val errorState = NetworkState.error(throwable.message ?: DEF_ERROR)
+            emit(RepoResult(networkState = errorState))
+        }
+    }
+
     fun getMovies(scope: CoroutineScope, genre: Genre): Listing<Movie> {
         val dataSourceFactory = MovieDataSource.Factory(
             block = { page -> getMoviesOfGenre(page, genre) },
@@ -62,27 +51,10 @@ class MovieRepository(
         val movies = dataSourceFactory.toLiveData(pageSize = 30)
         return Listing(
             data = movies,
-            dataState = dataSourceFactory.sourceLiveData.switchMap { it.networkState },
+            networkState = dataSourceFactory.sourceLiveData.switchMap { it.networkState },
             refreshState = dataSourceFactory.sourceLiveData.switchMap { it.refreshState },
             refresh = { dataSourceFactory.sourceLiveData.value?.invalidate() },
             retry = { dataSourceFactory.sourceLiveData.value?.retryWhenAllFailed() }
-        )
-    }
-
-    //-- Using flow with coroutine --//
-    @ExperimentalCoroutinesApi
-    fun getFlowMovies(scope: CoroutineScope, genre: Genre): Listing<Movie> {
-        val factory = MovieFlowDataSource.Factory(
-            block = { page -> getMoviesOfGenre(page, genre) },
-            scope = scope
-        )
-        val movies = factory.toLiveData(pageSize = 30)
-        return Listing(
-            data = movies,
-            dataState = factory.sourceLiveData.switchMap { it.dataState },
-            refreshState = factory.sourceLiveData.switchMap { it.refreshState },
-            retry = { factory.sourceLiveData.value?.retryWhenAllFailed() },
-            refresh = { factory.sourceLiveData.value?.invalidate() }
         )
     }
 
@@ -95,7 +67,16 @@ class MovieRepository(
             else -> movieDbApi.getMoviesByGenre(page, genre.id)
         }
 
-    suspend fun getMovieDetail(id: Int): Movie = movieDbApi.getMovieDetail(id)
+    fun getMovieDetail(id: Int): LiveData<RepoResult<Movie>> = liveData {
+        try {
+            emit(RepoResult(networkState = NetworkState.LOADING))
+            val movie = movieDbApi.getMovieDetail(id)
+            emit(RepoResult(data = movie, networkState = NetworkState.SUCCESS))
+        } catch (throwable: Throwable) {
+            val errorState = NetworkState.error(throwable.message ?: DEF_ERROR)
+            emit(RepoResult(networkState = errorState))
+        }
+    }
 
     fun getRatedMovies(scope: CoroutineScope, movieId: Int): Listing<Movie> {
         val factory = MovieDataSource.Factory(
@@ -105,11 +86,17 @@ class MovieRepository(
         val movies = factory.toLiveData(pageSize = 30)
         return Listing(
             data = movies,
-            dataState = factory.sourceLiveData.switchMap { it.networkState },
+            networkState = factory.sourceLiveData.switchMap { it.networkState },
             refreshState = factory.sourceLiveData.switchMap { it.refreshState },
             retry = { factory.sourceLiveData.value?.retryWhenAllFailed() },
             refresh = { factory.sourceLiveData.value?.invalidate() }
         )
+    }
+
+    companion object {
+
+        private const val DEF_ERROR = "Unknown error"
+
     }
 
 }

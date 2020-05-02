@@ -19,10 +19,14 @@ import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import kotlinx.android.synthetic.main.layout_network_state.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 /**
  * The class represent movie detail screen.
  */
+@ExperimentalCoroutinesApi
+@FlowPreview
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetailViewModel>() {
 
     private var movieId: Int = 0
@@ -61,22 +65,21 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
     }
 
     private fun setupNavigation() {
-        close_image.setOnClickListener { navController.popBackStack() }
-        error_close_image.setOnClickListener { navController.popBackStack() }
-        retry_button.setOnClickListener { viewModel.loadMovie() }
-        visit_site_button.setOnClickListener {
-            val movie = viewModel.movie.value ?: return@setOnClickListener
-            val url = movie.homepage
-            if (url.isNullOrEmpty()) return@setOnClickListener
-            val directions = MovieDetailFragmentDirections.navigateToWebsite(
-                title = movie.title ?: "",
-                url = url
-            )
-            navController.navigate(directions)
+        close_image.setOnClickListener {
+            navController.popBackStack()
         }
-        video_button.setOnClickListener {
-            // val directions = MovieDetailFragmentDirections.navigateToWatchVideo("ao1A4SyfVhg")
-            // navController.navigate(directions)
+        error_close_image.setOnClickListener {
+            navController.popBackStack()
+        }
+        retry_button.setOnClickListener {
+            viewModel.retryGetMovie()
+        }
+        visit_site_button.setOnClickListener {
+            val title = viewModel.movie.value?.title ?: return@setOnClickListener
+            val url = viewModel.movie.value?.homepage ?: return@setOnClickListener
+            if (url.isEmpty() || title.isEmpty()) return@setOnClickListener
+            val directions = MovieDetailFragmentDirections.navigateToWebsite(title, url)
+            navController.navigate(directions)
         }
     }
 
