@@ -17,6 +17,8 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var resetScroll: Boolean = false
+
     private val _savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
     val savedGenre: LiveData<Genre>
         get() = _savedGenre
@@ -34,9 +36,17 @@ class HomeViewModel(
     fun showMoviesOfCategory(genre: Genre) {
         if (savedStateHandle.get<Genre>(KEY_GENRE) == genre) return
         savedStateHandle.set(KEY_GENRE, genre)
+        resetScroll = true
     }
 
-    fun retryGetMovies(){
+    fun scrollToInitPosition(action: () -> Unit){
+        if (resetScroll){
+            action.invoke()
+            resetScroll = false
+        }
+    }
+
+    fun retryGetMovies() {
         val savedGenre = savedStateHandle.get<Genre>(KEY_GENRE)
         savedStateHandle.set(KEY_GENRE, savedGenre)
     }

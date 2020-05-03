@@ -25,6 +25,7 @@ import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 
 /**
  * The Fragment represents home screen.
@@ -36,9 +37,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private lateinit var adapter: MovieListAdapter
 
     private val loadStateListener = { loadType: LoadType, loadState: LoadState ->
+        Timber.d("Load type: $loadType - Load state: $loadState")
         if (loadType == LoadType.REFRESH) {
             movie_swipe_refresh.isVisible = loadState == LoadState.Idle
-            movie_recycler.scrollToPosition(0)
+            viewModel.scrollToInitPosition { movie_recycler.scrollToPosition(0) }
             progress.isVisible = loadState == LoadState.Loading
             retry_button.isVisible = loadState is LoadState.Error
         } else {
