@@ -19,13 +19,12 @@ import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
 import com.sournary.architecturecomponent.ext.hideKeyboard
 import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.ui.common.BaseFragment
-import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
+import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import timber.log.Timber
 
 /**
  * The Fragment represents home screen.
@@ -37,15 +36,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private lateinit var adapter: MovieListAdapter
 
     private val loadStateListener = { loadType: LoadType, loadState: LoadState ->
-        Timber.d("Load type: $loadType - Load state: $loadState")
         if (loadType == LoadType.REFRESH) {
-            movie_recycler.isVisible = loadState == LoadState.Idle
+            movie_swipe_refresh.isVisible = loadState == LoadState.Idle
+            movie_recycler.scrollToPosition(0)
             progress.isVisible = loadState == LoadState.Loading
             retry_button.isVisible = loadState is LoadState.Error
         } else {
             movie_recycler.isVisible = true
             progress.isVisible = false
             retry_button.isVisible = false
+            if (movie_swipe_refresh.isRefreshing) {
+                movie_swipe_refresh.isRefreshing = false
+            }
         }
     }
 
@@ -98,7 +100,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
         retry_button.setOnClickListener {
-            adapter.retry()
+            viewModel.retryGetMovies()
         }
     }
 
@@ -106,8 +108,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         hideKeyboard()
         val searchText = search_text_input.text?.trim() ?: return
         viewModel.genres.value?.forEach { genre ->
-            if (genre.name == searchText && viewModel.showMoviesOfCategory(genre)) {
-                movie_recycler.scrollToPosition(0)
+            if (genre.name == searchText) {
+                viewModel.showMoviesOfCategory(genre)
             }
         }
     }
@@ -155,8 +157,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 hideKeyboard()
                 chip.requestFocus()
                 search_text_input.setText(genre.name)
-                if (viewModel.showMoviesOfCategory(genre)) {
-                    movie_recycler.scrollToPosition(0)
+                if (search_text_input.text?.trim() != genre.name) {
+                    viewModel.showMoviesOfCategory(genre)
                 }
             }
             genre_group.addView(chip)

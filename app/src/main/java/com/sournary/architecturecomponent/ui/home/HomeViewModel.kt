@@ -31,10 +31,14 @@ class HomeViewModel(
         }
     }
 
-    fun showMoviesOfCategory(genre: Genre): Boolean {
-        if (savedStateHandle.get<Genre>(KEY_GENRE) == genre) return false
+    fun showMoviesOfCategory(genre: Genre) {
+        if (savedStateHandle.get<Genre>(KEY_GENRE) == genre) return
         savedStateHandle.set(KEY_GENRE, genre)
-        return true
+    }
+
+    fun retryGetMovies(){
+        val savedGenre = savedStateHandle.get<Genre>(KEY_GENRE)
+        savedStateHandle.set(KEY_GENRE, savedGenre)
     }
 
     companion object {
