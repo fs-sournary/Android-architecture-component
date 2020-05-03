@@ -13,7 +13,7 @@ import com.sournary.architecturecomponent.ext.setSafeClick
  * Maybe action: retry, refresh
  * Maybe state: loading, done...
  */
-class FooterNetworkStateAdapter(private val retry: (() -> Unit)) :
+class NetworkStateAdapter(private val retry: (() -> Unit)) :
     LoadStateAdapter<ListViewHolder<ItemNetworkStateBinding>>() {
 
     override fun onBindViewHolder(

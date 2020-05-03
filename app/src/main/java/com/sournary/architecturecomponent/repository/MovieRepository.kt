@@ -94,7 +94,7 @@ class MovieRepository(private val movieDbApi: MovieDbApi, private val genreDao: 
     companion object {
 
         private const val DEF_ERROR = "Unknown error"
-        private const val NETWORK_PAGE_SIZE = 50
+        private const val NETWORK_PAGE_SIZE = 20
 
     }
 

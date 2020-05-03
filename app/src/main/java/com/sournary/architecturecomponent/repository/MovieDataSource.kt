@@ -15,7 +15,7 @@ class MovieDataSource(private val block: suspend (Int) -> MovieListResponse) :
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val currentPage = params.key ?: START_PAGE_INDEX
         return try {
-            val response = block.invoke(1)
+            val response = block.invoke(currentPage)
             val movies = response.results ?: emptyList()
             return LoadResult.Page(
                 data = movies,

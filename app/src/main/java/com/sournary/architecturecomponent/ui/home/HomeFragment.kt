@@ -19,12 +19,13 @@ import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
 import com.sournary.architecturecomponent.ext.hideKeyboard
 import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.ui.common.BaseFragment
-import com.sournary.architecturecomponent.ui.common.FooterNetworkStateAdapter
+import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 
 /**
  * The Fragment represents home screen.
@@ -36,6 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private lateinit var adapter: MovieListAdapter
 
     private val loadStateListener = { loadType: LoadType, loadState: LoadState ->
+        Timber.d("Load type: $loadType - Load state: $loadState")
         if (loadType == LoadType.REFRESH) {
             movie_recycler.isVisible = loadState == LoadState.Idle
             progress.isVisible = loadState == LoadState.Loading
@@ -119,8 +121,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             navController.navigate(directions)
         }
         movie_recycler.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = FooterNetworkStateAdapter { adapter.retry() },
-            footer = FooterNetworkStateAdapter { adapter.retry() }
+            header = NetworkStateAdapter { adapter.retry() },
+            footer = NetworkStateAdapter { adapter.retry() }
         )
         adapter.removeLoadStateListener(loadStateListener)
         adapter.addLoadStateListener(loadStateListener)

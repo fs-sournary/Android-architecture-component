@@ -14,6 +14,7 @@ import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentMovieDetailBinding
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
+import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import kotlinx.android.synthetic.main.layout_network_state.*
@@ -83,7 +84,10 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
 
     private fun setupRelatedMovieList() {
         relatedMovieAdapter = RelatedMovieAdapter()
-        related_movie_recycler.adapter = relatedMovieAdapter
+        related_movie_recycler.adapter = relatedMovieAdapter.withLoadStateHeaderAndFooter(
+            header = NetworkStateAdapter { relatedMovieAdapter.retry() },
+            footer = NetworkStateAdapter { relatedMovieAdapter.retry() }
+        )
     }
 
     private fun setupViewModel() {
