@@ -46,12 +46,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginBottom="@dimen/dp_16"
+            android:overScrollMode="never"
             android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/genre_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:selectionRequired="true"
                 app:singleLine="true"
                 app:singleSelection="true" />
 

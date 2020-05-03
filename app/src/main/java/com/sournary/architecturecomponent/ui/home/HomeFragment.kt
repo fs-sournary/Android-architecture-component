@@ -104,6 +104,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         retry_button.setOnClickListener {
             viewModel.retryGetMovies()
         }
+        genre_group.setOnCheckedChangeListener { _, checkedId ->
+            viewModel.checkId = checkedId
+        }
     }
 
     private fun getMoviesFromSearch() {
@@ -151,10 +154,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private fun addGenres(genres: List<Genre>) {
         genre_group.removeAllViews()
-        genres.forEach { genre ->
+        genres.forEachIndexed { index, genre ->
             val chip =
                 layoutInflater.inflate(R.layout.layout_genre_item, genre_group, false) as Chip
             chip.text = genre.name
+            chip.id = index
             chip.setOnClickListener {
                 hideKeyboard()
                 chip.requestFocus()
@@ -165,5 +169,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
             genre_group.addView(chip)
         }
+        genre_group.check(viewModel.checkId)
     }
 }

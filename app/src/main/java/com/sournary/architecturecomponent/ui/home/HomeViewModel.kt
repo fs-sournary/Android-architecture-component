@@ -17,7 +17,10 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    // The Boolean determines whether the movie_recycler should scroll to 0.
     private var resetScroll: Boolean = false
+    // The Integer stores the last checked id of the chip in the genre_group chip group.
+    var checkId = 0
 
     private val _savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
     val savedGenre: LiveData<Genre>
@@ -39,8 +42,8 @@ class HomeViewModel(
         resetScroll = true
     }
 
-    fun scrollToInitPosition(action: () -> Unit){
-        if (resetScroll){
+    fun scrollToInitPosition(action: () -> Unit) {
+        if (resetScroll) {
             action.invoke()
             resetScroll = false
         }

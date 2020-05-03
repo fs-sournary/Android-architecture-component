@@ -24,8 +24,8 @@ import kotlinx.coroutines.FlowPreview
 /**
  * The class represent movie detail screen.
  */
-@ExperimentalCoroutinesApi
 @FlowPreview
+@ExperimentalCoroutinesApi
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetailViewModel>() {
 
     private var movieId: Int = 0
