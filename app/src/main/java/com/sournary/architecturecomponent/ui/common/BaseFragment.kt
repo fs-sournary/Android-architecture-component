@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.sournary.architecturecomponent.BR
+import com.sournary.architecturecomponent.ext.autoCleared
 
 /**
  * The class is the base for app's Fragment.
@@ -23,7 +24,7 @@ import com.sournary.architecturecomponent.BR
 abstract class BaseFragment<B : ViewDataBinding, VM : ViewModel> : Fragment() {
 
     protected val navController: NavController by lazy { findNavController() }
-    protected lateinit var binding: B
+    protected var binding by autoCleared<B>()
 
     protected abstract val viewModel: VM
 
@@ -31,9 +32,7 @@ abstract class BaseFragment<B : ViewDataBinding, VM : ViewModel> : Fragment() {
     protected abstract val layoutId: Int
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         return binding.root

@@ -12,8 +12,9 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentMovieDetailBinding
+import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ui.common.BaseFragment
-import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
+import com.sournary.architecturecomponent.ui.common.MainViewModel
 import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
@@ -30,9 +31,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
 
     private var movieId: Int = 0
 
-    private lateinit var relatedMovieAdapter: RelatedMovieAdapter
+    private var relatedMovieAdapter by autoCleared<RelatedMovieAdapter>()
 
-    private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     override val viewModel: MovieDetailViewModel by viewModels { MovieDetailViewModelFactory(movieId) }
 
     override val layoutId: Int = R.layout.fragment_movie_detail
@@ -91,7 +92,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
     }
 
     private fun setupViewModel() {
-        menuFlowViewModel.setLockNavigation(true)
+        mainViewModel.setLockNavigation(true)
         viewModel.apply {
             relatedMovies.observe(viewLifecycleOwner) {
                 relatedMovieAdapter.submitData(viewLifecycleOwner.lifecycle, it)

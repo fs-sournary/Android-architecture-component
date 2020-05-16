@@ -13,8 +13,7 @@ import kotlinx.coroutines.FlowPreview
 @FlowPreview
 @ExperimentalCoroutinesApi
 class HomeViewModel(
-    movieRepository: MovieRepository,
-    private val savedStateHandle: SavedStateHandle
+    movieRepository: MovieRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     // The Boolean determines whether the movie_recycler should scroll to 0.
@@ -23,8 +22,7 @@ class HomeViewModel(
     var checkId = 0
 
     private val _savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
-    val savedGenre: LiveData<Genre>
-        get() = _savedGenre
+    val savedGenre: LiveData<Genre> = _savedGenre
     val movies = _savedGenre.switchMap { movieRepository.getMovies(it).cachedIn(viewModelScope) }
 
     val genres: LiveData<List<Genre>> = movieRepository.genres

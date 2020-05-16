@@ -17,8 +17,7 @@ class NetworkStateAdapter(private val retry: (() -> Unit)) :
     LoadStateAdapter<ListViewHolder<ItemNetworkStateBinding>>() {
 
     override fun onBindViewHolder(
-        holder: ListViewHolder<ItemNetworkStateBinding>,
-        loadState: LoadState
+        holder: ListViewHolder<ItemNetworkStateBinding>, loadState: LoadState
     ) {
         holder.binding.apply {
             isLoading = loadState == LoadState.Loading
@@ -30,8 +29,7 @@ class NetworkStateAdapter(private val retry: (() -> Unit)) :
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        loadState: LoadState
+        parent: ViewGroup, loadState: LoadState
     ): ListViewHolder<ItemNetworkStateBinding> {
         val binding =
             ItemNetworkStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)

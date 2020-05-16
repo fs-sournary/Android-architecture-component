@@ -16,10 +16,11 @@ import androidx.paging.LoadType
 import com.google.android.material.chip.Chip
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
+import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ext.hideKeyboard
 import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.ui.common.BaseFragment
-import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
+import com.sournary.architecturecomponent.ui.common.MainViewModel
 import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -34,7 +35,7 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
-    private lateinit var adapter: MovieListAdapter
+    private var adapter by autoCleared<MovieListAdapter>()
 
     private val loadStateListener = { loadType: LoadType, loadState: LoadState ->
         Timber.d("Load type: $loadType - Load state: $loadState")
@@ -53,7 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(this) }
 
     override val layoutId: Int = R.layout.fragment_home
@@ -95,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             if (event.action == MotionEvent.ACTION_UP &&
                 event.x <= search_text_input.compoundDrawables[0].bounds.width()
             ) {
-                menuFlowViewModel.openNavigation()
+                mainViewModel.openNavigation()
                 true
             } else {
                 false
@@ -141,7 +142,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     private fun setupViewModel() {
-        menuFlowViewModel.setLockNavigation(false)
+        mainViewModel.setLockNavigation(false)
         viewModel.apply {
             movies.observe(viewLifecycleOwner) {
                 adapter.submitData(viewLifecycleOwner.lifecycle, it)

@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  * The decoration defines view that separate items in the movie Recycler's adapter.
  */
 class MovieItemDecoration(
-    private val horizontalSpacing: Int,
-    private val divider: Drawable
+    private val horizontalSpacing: Int, private val divider: Drawable
 ) : RecyclerView.ItemDecoration() {
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {

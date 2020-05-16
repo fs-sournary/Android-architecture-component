@@ -8,13 +8,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
+import com.sournary.architecturecomponent.ui.common.MainViewModel
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val menuFlowViewModel: MenuFlowViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     private lateinit var navController: NavController
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        menuFlowViewModel.apply {
+        mainViewModel.apply {
             lockNavigation.observe(this@MainActivity) { isLock ->
                 val mode = when (isLock) {
                     true -> DrawerLayout.LOCK_MODE_LOCKED_CLOSED
