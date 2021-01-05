@@ -1,0 +1,150 @@
+def versions = [:]
+versions.activity = '1.1.0'
+versions.android_gradle_plugin = '3.6.3'
+versions.annotation = '1.1.0'
+versions.app_compat = '1.1.0'
+versions.arch_core = '2.1.0'
+versions.constraint_layout = "2.0.0-beta4"
+versions.swipe_refresh_layout = "1.0.0"
+versions.core = "1.3.0-alpha01"
+versions.kotlin = '1.3.61'
+versions.coroutines = '1.3.3'
+versions.glide = '4.11.0'
+versions.lifecycle = '2.2.0'
+versions.lifecycle_savedstate = "1.0.0"
+versions.material = "1.2.0-alpha04"
+versions.navigation = "2.2.0"
+versions.okhttp_logging_interceptor = '4.0.1'
+versions.paging = '3.0.0-alpha06'
+versions.retrofit = '2.7.1'
+versions.room = '2.2.3'
+versions.rx_android = '2.1.1'
+versions.rx_java2 = '2.2.17'
+versions.timber = '4.7.1'
+versions.transition = '1.3.0'
+versions.work = '2.3.0'
+versions.koin = '2.0.1'
+versions.coroutine = "1.3.0"
+versions.hilt = "2.28-alpha"
+versions.hilt_android = "1.0.0-alpha01"
+
+def deps = [:]
+
+def activity = [:]
+activity.core = "androidx.activity:activity-ktx:$versions.activity"
+deps.activity = activity
+
+deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+
+deps.annotation = "androidx.annotation:annotation:$versions.annotation"
+
+deps.app_compat = "androidx.appcompat:appcompat:$versions.app_compat"
+
+deps.swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swipe_refresh_layout"
+
+def arch_core = [:]
+arch_core.runtime = "androidx.arch.core:core-runtime:$versions.arch_core"
+arch_core.testing = "androidx.arch.core:core-testing:$versions.arch_core"
+deps.arch_core = arch_core
+
+deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+
+deps.core = "androidx.core:core-ktx:$versions.core"
+
+def coroutines = [:]
+coroutines.android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+coroutines.test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+deps.coroutines = coroutines
+
+def glide = [:]
+glide.runtime = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+deps.glide = glide
+
+def kotlin = [:]
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+kotlin.allopen = "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
+deps.kotlin = kotlin
+
+def lifecycle = [:]
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+lifecycle.livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
+lifecycle.savedstate = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$versions.lifecycle_savedstate"
+deps.lifecycle = lifecycle
+
+deps.material = "com.google.android.material:material:$versions.material"
+
+def navigation = [:]
+navigation.fragment = "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.ui = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+navigation.safe_args = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
+deps.navigation = navigation
+
+deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp_logging_interceptor"
+
+deps.paging = "androidx.paging:paging-runtime-ktx:$versions.paging"
+
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+retrofit.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+deps.retrofit = retrofit
+
+def room = [:]
+room.runtime = "androidx.room:room-ktx:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
+deps.room = room
+
+def rx = [:]
+rx.android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
+rx.java2 = "io.reactivex.rxjava2:rxjava:$versions.rx_java2"
+deps.rx = rx
+
+def koin = [:]
+koin.scope = "org.koin:koin-androidx-scope:$versions.koin"
+koin.viewmodel = "org.koin:koin-androidx-viewmodel:$versions.koin"
+koin.ext = "org.koin:koin-androidx-ext:$versions.koin"
+deps.koin = koin
+
+deps.timber = "com.jakewharton.timber:timber:$versions.timber"
+
+deps.transition = "androidx.transition:transition:$versions.transition"
+
+def work = [:]
+work.runtime = "androidx.work:work-runtime-ktx:$versions.work"
+work.rxjava2 = "androidx.work:work-rxjava2:$versions.work"
+deps.work = work
+
+def coroutine = [:]
+coroutine.core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutine"
+coroutine.android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutine"
+deps.coroutine = coroutine
+
+def hilt = [:]
+hilt.gradle_plugin = "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt"
+hilt.android = "com.google.dagger:hilt-android:$versions.hilt"
+hilt.compiler = "com.google.dagger:hilt-android-compiler:$versions.hilt"
+hilt.android_viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_android"
+hilt.android_compiler = "androidx.hilt:hilt-compiler:$versions.hilt_android"
+deps.hilt = hilt
+
+def build_versions = [:]
+build_versions.min_sdk = 21
+build_versions.target_sdk = 29
+build_versions.build_tool = "29.0.3"
+ext.build_versions = build_versions
+
+ext.deps = deps
+
+static def addRepos(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+    handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    handler.maven { url 'https://androidx-dev-prod.appspot.com/snapshots/builds/6295087/artifacts/repository' }
+}
+
+ext.addRepos = this.&addRepos

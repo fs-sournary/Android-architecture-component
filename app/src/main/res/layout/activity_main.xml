@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/main_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:openDrawer="start">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_view"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_main" />
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/main_nav"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:scrollbars="none"
+                app:headerLayout="@layout/navigation_header"
+                app:insetForeground="@android:color/transparent"
+                app:itemBackground="@drawable/selector_navigation_item_background"
+                app:itemTextColor="@color/selector_navigation_item_text"
+                app:menu="@menu/menu_main_navigation" />
+        </androidx.drawerlayout.widget.DrawerLayout>
+    </FrameLayout>
+</layout>

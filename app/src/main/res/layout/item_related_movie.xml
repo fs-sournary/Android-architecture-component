@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.sournary.architecturecomponent.BuildConfig" />
+
+        <variable
+            name="item"
+            type="com.sournary.architecturecomponent.model.Movie" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/avatar_image"
+            android:layout_width="@dimen/dp_102"
+            android:layout_height="@dimen/dp_120"
+            app:centerCrop="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:url="@{BuildConfig.BASE_IMAGE_URL + item.backdropPath}"
+            tools:src="@drawable/img_navigation_header" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:lines="1"
+            android:text="@{item.title}"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/avatar_image"
+            tools:text="Star war: far from home" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/vote_average_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:drawableEnd="@drawable/ic_star_black"
+            android:drawablePadding="@dimen/dp_2"
+            android:text="@{String.valueOf(item.voteAverage)}"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            tools:text="4.3" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_popularity"
+            android:drawablePadding="@dimen/dp_2"
+            android:text="@{String.valueOf(item.popularity)}"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintBottom_toBottomOf="@id/vote_average_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/vote_average_text"
+            tools:text="43" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

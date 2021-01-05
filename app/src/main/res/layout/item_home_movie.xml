@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.sournary.architecturecomponent.BuildConfig" />
+
+        <variable
+            name="item"
+            type="com.sournary.architecturecomponent.model.Movie" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_movie_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/avatar_image"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            app:centerCrop="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:url="@{BuildConfig.BASE_IMAGE_URL + `/` + item.backdropPath}"
+            tools:src="@mipmap/ic_launcher" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:maxLines="2"
+            android:text="@{item.title}"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar_image"
+            app:layout_constraintTop_toTopOf="@id/avatar_image"
+            tools:text="A film" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/vote_average_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:drawableEnd="@drawable/ic_star_black"
+            android:drawablePadding="@dimen/dp_2"
+            android:text="@{String.valueOf(item.voteAverage)}"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintStart_toStartOf="@id/title_text"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            tools:text="4.3" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_popularity"
+            android:drawablePadding="@dimen/dp_2"
+            android:text="@{String.valueOf(item.popularity)}"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintTop_toTopOf="@id/vote_average_text"
+            app:layout_constraintStart_toEndOf="@id/vote_average_text"
+            android:layout_marginStart="@dimen/dp_16"
+            tools:text="43" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimary_10">#1A6200EE</color>
+    <color name="colorPrimary_40">#666200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="dark_scrim">#66333333</color>
+    <color name="black_10">#1A000000</color>
+    <color name="color_status_bar">@color/dark_scrim</color>
+    <color name="color_navigation_bar">@color/dark_scrim</color>
+</resources>
