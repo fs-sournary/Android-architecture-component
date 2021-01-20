@@ -1,4 +1,4 @@
-package com.sournary.architecturecomponent.ui.home
+package com.sournary.architecturecomponent.ui.home.problem
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
@@ -16,7 +16,7 @@ import com.sournary.architecturecomponent.util.Constant.KEY_GENRE
 /**
  * The view model contains all logic of home screen.
  */
-class HomeViewModel @ViewModelInject constructor(
+class ProblemHomeViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -24,14 +24,20 @@ class HomeViewModel @ViewModelInject constructor(
     // The Integer stores the last checked id of the chip in the genre_group chip group.
     var checkId = Genre.SAVED_GENRES[0].id
 
-    private val _savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
-    val savedGenre: LiveData<Genre> = _savedGenre
+    // Fixme: problem 1: expose LiveData to View
+    val _savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
+
     val movies = _savedGenre.switchMap { homeRepository.getMovies(it).cachedIn(viewModelScope) }
 
     private val _getGenres = MutableLiveData<Any>()
     val genres = _getGenres.switchMap { homeRepository.getGenres() }
 
-    init {
+    // Fixme: problem 5: Using LiveData to implement events
+    private val _showGenreMessageEvent = MutableLiveData<String>()
+    val showGenreMessageEvent: LiveData<String> = _showGenreMessageEvent
+
+    // Fixme: problem 3: Reload data each time navigation or device rotation
+    fun loadGenreAndMovie() {
         // Save now playing genre into disk for the first time.
         if (!savedStateHandle.contains(KEY_GENRE)) {
             savedStateHandle.set(KEY_GENRE, Genre.SAVED_GENRES[0])
@@ -51,5 +57,9 @@ class HomeViewModel @ViewModelInject constructor(
             checkId = savedGenre.id
             _getGenres.value = Any()
         }
+    }
+
+    fun showGenreTitle(title: String) {
+        _showGenreMessageEvent.value = title
     }
 }

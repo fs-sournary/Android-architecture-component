@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.sournary.architecturecomponent.ui.moviedetail.MovieDetailViewModel" />
+            type="com.sournary.architecturecomponent.ui.moviedetail.solution.MovieDetailViewModel" />
     </data>
 
     <FrameLayout
