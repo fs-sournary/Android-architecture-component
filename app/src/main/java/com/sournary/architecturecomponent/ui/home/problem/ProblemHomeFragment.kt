@@ -1,4 +1,4 @@
-package com.sournary.architecturecomponent.ui.home
+package com.sournary.architecturecomponent.ui.home.problem
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
 import com.sournary.architecturecomponent.ext.autoCleared
@@ -23,6 +24,7 @@ import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.ui.MainViewModel
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
+import com.sournary.architecturecomponent.ui.home.MovieListAdapter
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -33,17 +35,18 @@ import kotlinx.coroutines.flow.filter
  * The Fragment represents home screen.
  */
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
+class ProblemHomeFragment : BaseFragment<FragmentHomeBinding, ProblemHomeViewModel>() {
 
     private var adapter by autoCleared<MovieListAdapter>()
 
     private val mainViewModel: MainViewModel by activityViewModels()
-    override val viewModel: HomeViewModel by viewModels()
+    override val viewModel: ProblemHomeViewModel by viewModels()
 
     override val layoutId: Int = R.layout.fragment_home
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.loadGenreAndMovie()
         setupWindow(view)
         setupSearch()
         setupMovieList()
@@ -109,7 +112,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             adapter.refresh()
         }
         adapter = MovieListAdapter { movie ->
-            val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
+            val directions = ProblemHomeFragmentDirections.navigateToMovieDetail(movie.id)
             navController.navigate(directions)
         }
         binding.movieRecycler.adapter = adapter.withLoadStateHeaderAndFooter(
@@ -141,11 +144,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private fun setupViewModel() {
         mainViewModel.setLockNavigation(false)
         viewModel.apply {
-            movies.observe(viewLifecycleOwner) {
+            // Fixme: problem 2 Leaking LiveData in Fragment
+            movies.observe(this@ProblemHomeFragment) {
                 adapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
             genres.observe(viewLifecycleOwner) {
                 addGenres(it)
+            }
+            showGenreMessageEvent.observe(viewLifecycleOwner) {
+                Snackbar.make(binding.root, "You choose: $it", Snackbar.LENGTH_SHORT).setAnchorView(binding.genreGroup).show()
             }
         }
     }
@@ -167,6 +174,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             chip.requestFocus()
             binding.searchTextInput.setText(genre.name)
             if (binding.searchTextInput.text?.trim() != genre.name) {
+                viewModel.showGenreTitle(genre.name ?: "")
                 viewModel.showGenreMovies(genre)
             }
         }

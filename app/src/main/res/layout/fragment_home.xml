@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.sournary.architecturecomponent.ui.home.HomeViewModel" />
+            type="com.sournary.architecturecomponent.ui.home.problem.ProblemHomeViewModel" />
 
     </data>
 
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:text="@{viewModel.savedGenre.name}" />
+                android:text="@{viewModel._savedGenre.name}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

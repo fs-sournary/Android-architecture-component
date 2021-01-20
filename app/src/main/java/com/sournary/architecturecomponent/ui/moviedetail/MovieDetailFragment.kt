@@ -15,6 +15,7 @@ import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ui.MainViewModel
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.NetworkStateAdapter
+import com.sournary.architecturecomponent.ui.moviedetail.solution.MovieDetailViewModel
 import com.sournary.architecturecomponent.util.EdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
